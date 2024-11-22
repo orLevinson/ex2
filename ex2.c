@@ -12,6 +12,7 @@ int main()
 	int choice;
 
 	// while the user doesn't want to exit continue the loop
+	// clarification : whenever I want to signify an input has an invalid value i use -1 as the error code
 	while (choice != 7)
 	{
 
@@ -340,12 +341,9 @@ int main()
 			/* Example:
 			6, smile: 2, cheer: 3 : 1, Smile!, Cheer!, Smile!, 5, Festival!
 			*/
-
 			int smileValue = 0, cheerValue = 0;
-			char smileLabel[20], cheerLabel[20]; // To store the labels for checking
+			char smileLabel[200]="", cheerLabel[200]=""; // maximum label length is 200(including spaces and ,)
 
-			// Read the labels and values with specific format
-			//   printf("%d %d\n", smileValue, cheerValue);
 			while (smileValue < 1 || cheerValue < 1)
 			{
 				if (smileValue == 0 && cheerValue == 0)
@@ -354,46 +352,84 @@ int main()
 				}
 				else
 				{
-					printf("Only 2 different positive numbers in the given format are allowed for the festival, please try again:");
+					printf("Only 2 different positive numbers in the given format are allowed for the festival, please try again:\n");
 				}
 
 				// check for the following template:
-				// <20-char-long-str>: <int><20-char-long-str>: <int>
-				scanf(" %20[^:\n\t]: %d%20[^:\n\t]: %d", smileLabel, &smileValue, cheerLabel, &cheerValue);
+				// <200-char-long-str>: <int><200-char-long-str>: <int>
+				// for some reason smile: %d, cheer: %d didn't work in any way
+				scanf(" %200[^:\n\t]: %d%200[^:\n\t]: %d", smileLabel, &smileValue, cheerLabel, &cheerValue);
 
-				// trim smileLabel and cheerLabel and also removing the ','
-				int cheerIdx = 0;
-				int smileIdx = 0;
-				for (int i = 0; i < 20; i++)
-				{
-					if (cheerLabel[i] != ' ' && cheerLabel[i] != ',')
-					{
-						cheerLabel[cheerIdx++] = cheerLabel[i];
+				// trim smileLabel and cheerLabel and also check for ',' delimiter
+				// how i wish you would let me create functions :(
+
+				// trim smileLabel
+				int smileLabelStart = -1;
+				int smileLabelEnd = -1;
+				// find the start and end of the string(without whitespace)
+				for(int i = 0; i < 200; i++){
+					if(smileLabelStart < 0 && smileLabel[i] != ' ' && smileLabel[i] != '\0' && smileLabel[i] != '\t' && smileLabel[i] != '\n'){
+						smileLabelStart = i;
 					}
-					if (smileLabel[i] != ' ')
-					{
-						smileLabel[smileIdx++] = smileLabel[i];
+					if(smileLabelEnd < 0 && smileLabel[200-1-i] != ' ' && smileLabel[200-1-i] != '\0' && smileLabel[200-1-i] != '\t' && smileLabel[200-1-i] != '\n'){
+						smileLabelEnd = 200 - 1 - i;
 					}
-				}
-				// clearing the rest of cheerLabel and smileLabel
-				for (int i = cheerIdx; i < 20; i++)
-				{
-					cheerLabel[i] = '\0';
-				}
-				for (int i = smileIdx; i < 20; i++)
-				{
-					smileLabel[i] = '\0';
+					if(smileLabelEnd >= 0 && smileLabelStart >= 0){
+						break;
+					}
 				}
 
-				// check if the labels match "smile" and "cheer"
+				printf("start - %d  end - %d\n",smileLabelStart,smileLabelEnd);
+				// shifting the non-whitespace part to the start and replacing everthing else with null values
+				for(int i = 0; i < 200; i++){
+					if(i <= smileLabelEnd - smileLabelStart){
+						smileLabel[i] = smileLabel[i+smileLabelStart];
+					}else{
+						smileLabel[i] = '\0';
+					}
+				}
+
+				// trim cheerLabel
+				int cheerLabelStart = -1;
+				int cheerLabelEnd = -1;
+				int delimiterFound = 0;
+
+				// check for ',' delimiter and replace it with ' '
+				for(int i = 0; i < 200; i++){
+					if(cheerLabel[i] == ','){
+						delimiterFound++;
+						cheerLabel[i] = ' ';
+						break;
+					}
+				}
+				// doing the same as smileLabel to cheerLabel
+				for(int i = 0; i < 200; i++){
+					if(cheerLabelStart < 0 && cheerLabel[i] != ' ' && cheerLabel[i] != '\0' && cheerLabel[i] != '\t' && cheerLabel[i] != '\n'){
+						cheerLabelStart = i;
+					}
+					if(cheerLabelEnd < 0 && cheerLabel[200-1-i] != ' ' && cheerLabel[200-1-i] != '\0' && cheerLabel[200-1-i] != '\t' && cheerLabel[200-1-i] != '\n'){
+						cheerLabelEnd = 200 - 1 - i;
+					}
+					if(cheerLabelEnd >= 0 && cheerLabelStart >= 0){
+						break;
+					}
+				}
+
+				for(int i = 0; i < 200; i++){
+					if(i <= cheerLabelEnd - cheerLabelStart){
+						cheerLabel[i] = cheerLabel[i+cheerLabelStart];
+					}else{
+						cheerLabel[i] = '\0';
+					}
+				}
+
+				// check if the trimmed labels match "smile" and "cheer"
 				char smileLabelValue[] = "smile";
 				char cheerLabelValue[] = "cheer";
-				for (int i = 0; i < 20; i++)
+				for (int i = 0; i < 200; i++)
 				{
-					// if there are letters in the current iteration smileLabelValue or cheerLabelValue
-					// it is ok to do them both in the same logical check because they have the same number of letters
-					// the same goes for checking if their values match to the labels in the input
-					if (cheerLabelValue[i] != '\0' || smileLabelValue[i] != '\0')
+					// cheerLabelValue and smileLabelValue are both 5 letters long
+					if (cheerLabelValue[i] != '\0')
 					{
 						if (cheerLabel[i] != cheerLabelValue[i] || smileLabel[i] != smileLabelValue[i])
 						{
@@ -404,7 +440,7 @@ int main()
 					}
 					else
 					{
-						// check if the inputted labels end together with the provided values
+						// check if the inputted labels are the same length as the provided values
 						if (cheerLabel[i] != '\0' || smileLabel[i] != '\0')
 						{
 							smileValue = -1;
@@ -418,7 +454,7 @@ int main()
 			// if the nums are not postive or match
 			if (smileValue < 1 || cheerValue < 1 || smileValue == cheerValue)
 			{
-				for (int i = 0; i < 20; i++)
+				for (int i = 0; i < 200; i++)
 				{
 					cheerLabel[i] = '\0';
 					smileLabel[i] = '\0';
@@ -427,7 +463,7 @@ int main()
 				cheerValue = -1;
 			}
 
-			number = 0;
+			int number = 0;
 			while (number < 1)
 			{
 				if (number != -1)
