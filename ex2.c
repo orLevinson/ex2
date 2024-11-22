@@ -1,6 +1,6 @@
 /******************
-Name:
-ID:
+Name: Or Levinson
+ID: levinso2
 Assignment: ex2
 *******************/
 
@@ -342,7 +342,7 @@ int main()
 			6, smile: 2, cheer: 3 : 1, Smile!, Cheer!, Smile!, 5, Festival!
 			*/
 			int smileValue = 0, cheerValue = 0;
-			char smileLabel[200]="", cheerLabel[200]=""; // maximum label length is 200(including spaces and ,)
+			char smileLabel[200] = "", cheerLabel[200] = ""; // maximum label length is 200(including spaces and ,)
 
 			while (smileValue < 1 || cheerValue < 1)
 			{
@@ -368,23 +368,31 @@ int main()
 				int smileLabelStart = -1;
 				int smileLabelEnd = -1;
 				// find the start and end of the string(without whitespace)
-				for(int i = 0; i < 200; i++){
-					if(smileLabelStart < 0 && smileLabel[i] != ' ' && smileLabel[i] != '\0' && smileLabel[i] != '\t' && smileLabel[i] != '\n'){
+				for (int i = 0; i < 200; i++)
+				{
+					if (smileLabelStart < 0 && smileLabel[i] != ' ' && smileLabel[i] != '\0' && smileLabel[i] != '\t' && smileLabel[i] != '\n')
+					{
 						smileLabelStart = i;
 					}
-					if(smileLabelEnd < 0 && smileLabel[200-1-i] != ' ' && smileLabel[200-1-i] != '\0' && smileLabel[200-1-i] != '\t' && smileLabel[200-1-i] != '\n'){
+					if (smileLabelEnd < 0 && smileLabel[200 - 1 - i] != ' ' && smileLabel[200 - 1 - i] != '\0' && smileLabel[200 - 1 - i] != '\t' && smileLabel[200 - 1 - i] != '\n')
+					{
 						smileLabelEnd = 200 - 1 - i;
 					}
-					if(smileLabelEnd >= 0 && smileLabelStart >= 0){
+					if (smileLabelEnd >= 0 && smileLabelStart >= 0)
+					{
 						break;
 					}
 				}
 
 				// shifting the non-whitespace part to the start and replacing everthing else with null values
-				for(int i = 0; i < 200; i++){
-					if(i <= smileLabelEnd - smileLabelStart){
-						smileLabel[i] = smileLabel[i+smileLabelStart];
-					}else{
+				for (int i = 0; i < 200; i++)
+				{
+					if (i <= smileLabelEnd - smileLabelStart)
+					{
+						smileLabel[i] = smileLabel[i + smileLabelStart];
+					}
+					else
+					{
 						smileLabel[i] = '\0';
 					}
 				}
@@ -396,33 +404,44 @@ int main()
 
 				// check for ',' delimiter and replace it with ' '
 				// if found letters before, quit.
-				for(int i = 0; i < 200; i++){
-					if(cheerLabel[i] == ' ' && cheerLabel[i] == '\0' && cheerLabel[i] == '\t' && cheerLabel[i] == '\n'){
+				for (int i = 0; i < 200; i++)
+				{
+					if (cheerLabel[i] == ' ' && cheerLabel[i] == '\0' && cheerLabel[i] == '\t' && cheerLabel[i] == '\n')
+					{
 						continue;
-					} else if(cheerLabel[i] == ','){
+					}
+					else if (cheerLabel[i] == ',')
+					{
 						delimiterFound++;
 						cheerLabel[i] = ' ';
-						
 					}
 					break;
 				}
 				// doing the same as smileLabel to cheerLabel
-				for(int i = 0; i < 200; i++){
-					if(cheerLabelStart < 0 && cheerLabel[i] != ' ' && cheerLabel[i] != '\0' && cheerLabel[i] != '\t' && cheerLabel[i] != '\n'){
+				for (int i = 0; i < 200; i++)
+				{
+					if (cheerLabelStart < 0 && cheerLabel[i] != ' ' && cheerLabel[i] != '\0' && cheerLabel[i] != '\t' && cheerLabel[i] != '\n')
+					{
 						cheerLabelStart = i;
 					}
-					if(cheerLabelEnd < 0 && cheerLabel[200-1-i] != ' ' && cheerLabel[200-1-i] != '\0' && cheerLabel[200-1-i] != '\t' && cheerLabel[200-1-i] != '\n'){
+					if (cheerLabelEnd < 0 && cheerLabel[200 - 1 - i] != ' ' && cheerLabel[200 - 1 - i] != '\0' && cheerLabel[200 - 1 - i] != '\t' && cheerLabel[200 - 1 - i] != '\n')
+					{
 						cheerLabelEnd = 200 - 1 - i;
 					}
-					if(cheerLabelEnd >= 0 && cheerLabelStart >= 0){
+					if (cheerLabelEnd >= 0 && cheerLabelStart >= 0)
+					{
 						break;
 					}
 				}
 
-				for(int i = 0; i < 200; i++){
-					if(i <= cheerLabelEnd - cheerLabelStart){
-						cheerLabel[i] = cheerLabel[i+cheerLabelStart];
-					}else{
+				for (int i = 0; i < 200; i++)
+				{
+					if (i <= cheerLabelEnd - cheerLabelStart)
+					{
+						cheerLabel[i] = cheerLabel[i + cheerLabelStart];
+					}
+					else
+					{
 						cheerLabel[i] = '\0';
 					}
 				}
@@ -506,10 +525,10 @@ int main()
 				}
 			}
 			break;
-		
-		case 7: 
-		printf("Thank you for your journey through Numeria!");
-		break;
+
+		case 7:
+			printf("Thank you for your journey through Numeria!");
+			break;
 
 		default:
 			printf("This option is not available, please try again.\n");
