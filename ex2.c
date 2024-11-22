@@ -47,7 +47,7 @@ int main()
 				// if there is an error
 				if (size == -1)
 				{
-					printf("Invalid face size, please try again.\n");
+					printf("The face's size must be an odd and positive number, please try again:\n");
 				}
 				else
 				{
@@ -359,7 +359,8 @@ int main()
 				// <200-char-long-str>: <int><200-char-long-str>: <int>
 				// for some reason smile: %d, cheer: %d didn't work in any way
 				scanf(" %200[^:\n\t]: %d%200[^:\n\t]: %d", smileLabel, &smileValue, cheerLabel, &cheerValue);
-
+				// clear everything else left
+				scanf("%*[^\t\n ]");
 				// trim smileLabel and cheerLabel and also check for ',' delimiter
 				// how i wish you would let me create functions :(
 
@@ -379,7 +380,6 @@ int main()
 					}
 				}
 
-				printf("start - %d  end - %d\n",smileLabelStart,smileLabelEnd);
 				// shifting the non-whitespace part to the start and replacing everthing else with null values
 				for(int i = 0; i < 200; i++){
 					if(i <= smileLabelEnd - smileLabelStart){
@@ -395,12 +395,16 @@ int main()
 				int delimiterFound = 0;
 
 				// check for ',' delimiter and replace it with ' '
+				// if found letters before, quit.
 				for(int i = 0; i < 200; i++){
-					if(cheerLabel[i] == ','){
+					if(cheerLabel[i] == ' ' && cheerLabel[i] == '\0' && cheerLabel[i] == '\t' && cheerLabel[i] == '\n'){
+						continue;
+					} else if(cheerLabel[i] == ','){
 						delimiterFound++;
 						cheerLabel[i] = ' ';
-						break;
+						
 					}
+					break;
 				}
 				// doing the same as smileLabel to cheerLabel
 				for(int i = 0; i < 200; i++){
@@ -449,21 +453,21 @@ int main()
 						break;
 					}
 				}
-			}
 
-			// if the nums are not postive or match
-			if (smileValue < 1 || cheerValue < 1 || smileValue == cheerValue)
-			{
-				for (int i = 0; i < 200; i++)
+				// if the nums are not postive or match
+				if (smileValue < 1 || cheerValue < 1 || smileValue == cheerValue || delimiterFound == 0)
 				{
-					cheerLabel[i] = '\0';
-					smileLabel[i] = '\0';
+					for (int i = 0; i < 200; i++)
+					{
+						cheerLabel[i] = '\0';
+						smileLabel[i] = '\0';
+					}
+					smileValue = -1;
+					cheerValue = -1;
 				}
-				smileValue = -1;
-				cheerValue = -1;
 			}
 
-			int number = 0;
+			number = 0;
 			while (number < 1)
 			{
 				if (number != -1)
@@ -503,7 +507,9 @@ int main()
 			}
 			break;
 		
-		case 7: break;
+		case 7: 
+		printf("Thank you for your journey through Numeria!");
+		break;
 
 		default:
 			printf("This option is not available, please try again.\n");
